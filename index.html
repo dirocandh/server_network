@@ -77,6 +77,18 @@
       font-weight: 500;
     }
     .tg-btn:hover { background: #1a9bde; }
+
+    /* ── Блок подписки по токену ── */
+    .sub-link {
+      display: block;
+      word-break: break-all;
+      color: #0070f3;
+      font-size: 13px;
+      line-height: 1.5;
+      margin: 8px 0 12px;
+      text-decoration: none;
+    }
+    .sub-link:hover { text-decoration: underline; }
   </style>
 </head>
 <body>
@@ -96,21 +108,76 @@
     </a>
 
     <p class="divider">или отсканируйте QR-код выше</p>
-    <p class="divider" style="font-size: 22px; font-weight: bold;">
-      <p class="divider" style="font-size: 22px; font-weight: bold;">
-        После оплаты
-      </p>
-      Перейдите по ссылке ниже для получения конфига
-    </p>
-    <p class="divider">
-      <a href="https://diandro.duckdns.org/new-order" target="_blank" rel="noopener noreferrer">
-        https://diandro.duckdns.org/new-order
+    <p class="divider" style="font-size: 22px; font-weight: bold; color: #111;">После оплаты</p>
+    <p class="divider">Перейдите по ссылке ниже для получения конфига</p>
+    <div id="config-link" class="divider">
+      <a href="https://vendorpatchnet.xyz/new-order" target="_blank" rel="noopener noreferrer">
+        https://vendorpatchnet.xyz/new-order
       </a>
-    </p>
+    </div>
+
     <div class="contact-block">
       <p>Есть вопросы? Пишите:</p>
-      <a class="tg-btn" href="https://t.me/ВАШ_НИК">✈️ Написать в Telegram</a>
+      <a class="tg-btn" href="https://t.me/dmkalisteel">✈️ Написать в Telegram</a>
     </div>
   </div>
+
+<script>
+(function () {
+  var raw   = (location.hash || '').replace(/^#/, '').trim();
+  var token = /^[A-Za-z0-9_-]{20,64}$/.test(raw) ? raw : null;
+  if (!token) return;
+
+  var base      = 'https://dirocandh.github.io/server_network/subs/';
+  var subUrl    = base + token + '.txt';
+  var container = document.getElementById('config-link');
+  if (!container) return;
+
+  var hint = document.createElement('p');
+  hint.className   = 'hint';
+  hint.style.marginBottom = '8px';
+  hint.textContent = 'Вставьте эту ссылку как подписку в ваш VPN-клиент (v2rayNG, Hiddify и т.п.)';
+
+  var a = document.createElement('a');
+  a.href      = subUrl;    /* constructed from validated token — no injection risk */
+  a.textContent = subUrl;  /* textContent, not innerHTML */
+  a.target    = '_blank';
+  a.rel       = 'noopener noreferrer';
+  a.className = 'sub-link';
+
+  var btn = document.createElement('button');
+  btn.textContent = 'Скопировать ссылку';
+  btn.className   = 'sbp-btn';
+  btn.style.cssText = 'display:block;width:100%;margin-top:4px;border:none;cursor:pointer;';
+
+  btn.onclick = function () {
+    function fallback() {
+      var ta = document.createElement('textarea');
+      ta.value = subUrl;
+      ta.style.cssText = 'position:fixed;left:-9999px;top:-9999px';
+      document.body.appendChild(ta);
+      ta.focus(); ta.select();
+      try { document.execCommand('copy'); } catch (_) {}
+      document.body.removeChild(ta);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(subUrl).catch(fallback);
+    } else {
+      fallback();
+    }
+    btn.textContent = '✅ Скопировано!';
+    btn.style.background = '#1a7f37';
+    setTimeout(function () {
+      btn.textContent = 'Скопировать ссылку';
+      btn.style.background = '';
+    }, 2500);
+  };
+
+  while (container.firstChild) container.removeChild(container.firstChild);
+  container.appendChild(hint);
+  container.appendChild(a);
+  container.appendChild(btn);
+})();
+</script>
 </body>
 </html>
