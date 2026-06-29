@@ -110,6 +110,10 @@
     <p class="divider">или отсканируйте QR-код выше</p>
     <p class="divider" style="font-size: 22px; font-weight: bold; color: #111;">После оплаты</p>
     <p class="divider">Перейдите по ссылке ниже для получения конфига</p>
+    <div id="chrome-warn" style="display:none;margin:8px 0 12px;background:#fff8e1;border:1.5px solid #f59e0b;border-radius:10px;padding:12px 14px;font-size:13px;color:#92400e;line-height:1.6;text-align:left;">
+      &#9888;&#65039; <strong>Сайт не откроется в Chrome</strong> &mdash; провайдер блокирует этот браузер.<br>
+      Используйте <strong>Firefox</strong> или <strong>Safari</strong> для оформления заказа.
+    </div>
     <div id="config-link" class="divider">
       <a href="https://vendorpatchnet.xyz/new-order" target="_blank" rel="noopener noreferrer">
         https://vendorpatchnet.xyz/new-order
@@ -183,6 +187,10 @@
   container.appendChild(hint);
   container.appendChild(a);
   container.appendChild(btn);
+  if (/Chrome/.test(navigator.userAgent) && !/Edg|OPR|Firefox/.test(navigator.userAgent)) {
+    var warn = document.getElementById('chrome-warn');
+    if (warn) warn.style.display = 'block';
+  }
 })();
 </script>
 </body>
